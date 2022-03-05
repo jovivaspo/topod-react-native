@@ -32,7 +32,7 @@ const HomeScreen = () => {
           <Text style={styles.subtitle}>DISFRUTA ESCUCHANDO TUS VÍDEOS FAVORITOS ALLÁ DONDE VAYAS</Text>
           <View style={styles.containerButton}>
             <Button
-              onPress={() => navigation.navigate('Seacher')}
+              onPress={() => navigation.navigate('Buscar')}
               title="Busca tu video"
               buttonStyle={{
                 borderColor: '#fff',
