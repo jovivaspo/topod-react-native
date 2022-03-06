@@ -1,22 +1,18 @@
-import { Input, Button, LinearProgress } from 'react-native-elements';
-import React, { useState } from 'react'
+import { Input, Button } from 'react-native-elements';
+import React, { useContext, useState} from 'react'
 import { View, StyleSheet } from 'react-native';
 import { helpHttp } from '../services/helpHttp';
 import { urls } from '../services/urlApi';
-import { color } from 'react-native-reanimated';
+import { GlobalContext } from '../context/GlobalContext';
 
 const Search = () => {
 
     const [search, setSearch] = useState('')
-    const [loading, setLoading] = useState(false)
-    const [videos, setVideos] = useState([])
-    const [alert, setAlert] = useState()
-
-    console.log(urls().SEARCH_VIDEOS)
+    const { setLoading, setVideos, setAlert} = useContext(GlobalContext)
 
     const handlerSearch = () => {
         if (search === '') return false
-        console.log(search)
+      
         setLoading(true)
         helpHttp().get(`${urls().SEARCH_VIDEOS}${search}`)
             .then(res => {
@@ -29,6 +25,7 @@ const Search = () => {
                     })
                     return false
                 }
+                
                 setLoading(false)
                 setVideos(res.videos)
                 setSearch('')
@@ -63,10 +60,6 @@ const Search = () => {
                     onPress={handlerSearch}
                 />
             </View>
-            <View style={{flex:1/10, flexDirection:'row', width:'100%', alignItems:'center', justifyContent:'center', marginTop:-10}}>
-                {loading && <LinearProgress style={{width:'80%'}} color='#CEA858' />}
-            </View>
-
         </>
     )
 }
