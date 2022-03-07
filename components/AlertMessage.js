@@ -40,9 +40,10 @@ const AlertMessage = () => {
         }}>
             <Text style={{
                 fontSize:16,
+                fontWeight:'bold',
                 color:'white',
                 textAlign:'center',
-                marginTop:8,
+                marginTop:10,
             }}>{alert.message}</Text>
         </View></View>)
    

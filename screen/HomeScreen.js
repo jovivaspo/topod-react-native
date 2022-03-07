@@ -5,12 +5,15 @@ import { Button } from 'react-native-elements'
 import { useNavigation } from '@react-navigation/native'
 import AppLoading from 'expo-app-loading'
 import useFonts from '../useHooks/useFonts'
+import { useSelector } from 'react-redux'
 
 
 const HomeScreen = () => {
 
   const [IsReady, SetIsReady] = useState(false);
   const navigation = useNavigation()
+  const user = useSelector(state=>state.user)
+  console.log(user)
 
   const LoadFonts = async () => {
     await useFonts();

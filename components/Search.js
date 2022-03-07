@@ -12,7 +12,7 @@ const Search = () => {
 
     const handlerSearch = () => {
         if (search === '') return false
-      
+       
         setLoading(true)
         helpHttp().get(`${urls().SEARCH_VIDEOS}${search}`)
             .then(res => {

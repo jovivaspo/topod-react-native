@@ -43,8 +43,8 @@ const CardVideo = ({ video }) => {
                 justifyContent: 'flex-start',
                 width: '80%'
             }}>
-                <Text style={{ color: '#fff', marginRight:8 }}>{video.channel.name}</Text>
                 <Image source={{ uri: video.channel.thumbnail }} style={{ width: 20, height: 20 }} />
+                <Text style={{ color: '#fff', marginLeft:8 }}>{video.channel.name}</Text>
             </View>
             <View style={{
                 margin: 10,
