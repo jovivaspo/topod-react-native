@@ -1,22 +1,32 @@
 import { View, Text, ImageBackground, StyleSheet } from 'react-native'
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import ImageBackgroundHome from '../assets/Background-topodcast.webp'
 import { Button } from 'react-native-elements'
 import { useNavigation } from '@react-navigation/native'
 import AppLoading from 'expo-app-loading'
 import useFonts from '../useHooks/useFonts'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { loadUser, logout } from '../actions/userActions'
+
 
 
 const HomeScreen = () => {
 
   const [IsReady, SetIsReady] = useState(false);
   const navigation = useNavigation()
-  const user = useSelector(state=>state.user)
-  console.log(user)
+  const dispatch = useDispatch()
+  const user = useSelector(state => state.user)
+  console.log('En HomeScreen', user)
+  /*useEffect(()=>{
+    dispatch(loadUser())
+  },[])*/
 
   const LoadFonts = async () => {
     await useFonts();
+  }
+
+  const handlerLogout = () =>{
+    dispatch(logout())
   }
   
   if (!IsReady) {
@@ -47,8 +57,19 @@ const HomeScreen = () => {
                 marginHorizontal: 10,
                 marginVertical: 10,
               }}
-            />
-            <Button
+            />{user.userInfo? (<Button 
+              onPress={handlerLogout}
+              title='Cerrar sesión'
+              buttonStyle={{
+              borderColor: '#fff',
+            }}
+            type="outline"
+            titleStyle={{ color: '#fff' }}
+            containerStyle={{
+              width: 130,
+              marginHorizontal: 10,
+              marginVertical: 10,
+            }} />) : (<Button
               onPress={() => navigation.navigate('Login')}
               title="Registrate"
               buttonStyle={{
@@ -57,11 +78,12 @@ const HomeScreen = () => {
               type="outline"
               titleStyle={{ color: '#fff' }}
               containerStyle={{
-                width: 100,
+                width: 130,
                 marginHorizontal: 10,
                 marginVertical: 10,
               }}
-            />
+            />)}
+            
           </View>
       </ImageBackground>
     </View>
@@ -98,6 +120,8 @@ const styles = StyleSheet.create({
   },
   containerButton: {
     flexDirection: 'row',
+    justifyContent:'center',
+    width:'100%'
   }
 })
 

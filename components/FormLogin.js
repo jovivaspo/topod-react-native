@@ -4,7 +4,7 @@ import { Button, Input } from 'react-native-elements'
 import {GlobalContext} from '../context/GlobalContext'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
-import { register } from '../actions/userActions'
+import { register,login } from '../actions/userActions'
 
 const initialForm={
     name:"",
@@ -32,13 +32,11 @@ const FormLogin = () => {
     
           }
     
-        /*  dispatch(login(form, setAlert, setForm, initialForm))
-          setTimeout(()=>{
-            navigate('/playlist')
-          },1000)*/
+          dispatch(login(form, setAlert, setForm, initialForm))
+         
     
     
-        } else {
+        } else { //Registro
           if (form.password !== form.confirmPassword) {
             setAlert({
               open: true,
@@ -57,9 +55,9 @@ const FormLogin = () => {
           }
     
           dispatch(register(form, setAlert, setForm, initialForm))
-          setTimeout(()=>{
+          /*setTimeout(()=>{
             navigation.navigate('Home')
-          },1000)
+          },2000)*/
         }
       }
     return (

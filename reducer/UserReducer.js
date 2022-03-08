@@ -1,8 +1,11 @@
-import { REGISTER, LOGIN, LOGOUT } from "../types";
+import { REGISTER, LOGIN, LOGOUT, LOAD_USER } from "../types";
 
 
 const UserReducer = (state={},action) =>{
     switch(action.type){
+        case LOAD_USER:{
+            return {userInfo:action.payload}
+        }
         case REGISTER : {
             return {userInfo:action.payload}
         }
@@ -10,6 +13,7 @@ const UserReducer = (state={},action) =>{
             return {userInfo:action.payload}
         }
         case LOGOUT : {
+           
             return {userInfo:null}
         }
         default:

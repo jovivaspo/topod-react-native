@@ -8,7 +8,7 @@ import GaleryVideos from '../components/GaleryVideos'
 
 const SeacherScreen = () => {
   const { videos, loading, alert } = useContext(GlobalContext)
-  console.log(videos)
+ 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Busca tu vídeo</Text>
