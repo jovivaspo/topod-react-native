@@ -3,8 +3,6 @@ import React, {useEffect, useState} from 'react'
 import ImageBackgroundHome from '../assets/Background-topodcast.webp'
 import { Button } from 'react-native-elements'
 import { useNavigation } from '@react-navigation/native'
-import AppLoading from 'expo-app-loading'
-import useFonts from '../useHooks/useFonts'
 import { useSelector, useDispatch } from 'react-redux'
 import { loadUser, logout } from '../actions/userActions'
 
@@ -12,31 +10,16 @@ import { loadUser, logout } from '../actions/userActions'
 
 const HomeScreen = () => {
 
-  const [IsReady, SetIsReady] = useState(false);
+ 
   const navigation = useNavigation()
   const dispatch = useDispatch()
-  const user = useSelector(state => state.user)
-  console.log('En HomeScreen', user)
-  /*useEffect(()=>{
-    dispatch(loadUser())
-  },[])*/
-
-  const LoadFonts = async () => {
-    await useFonts();
-  }
+  
+  
 
   const handlerLogout = () =>{
     dispatch(logout())
   }
   
-  if (!IsReady) {
-    return (
-      <AppLoading startAsync={LoadFonts}
-        onFinish={() => SetIsReady(true)}
-        onError={() => { }} />
-    )
-  }
-
   return (
     <View style={styles.container}>
       <ImageBackground source={ImageBackgroundHome} resize="cover" style={styles.image} imageStyle=
@@ -49,6 +32,8 @@ const HomeScreen = () => {
               title="Busca tu video"
               buttonStyle={{
                 borderColor: '#fff',
+                color:'red',
+                fontFamily:'Bebas'
               }}
               type="outline"
               titleStyle={{ color: '#fff' }}
@@ -57,11 +42,13 @@ const HomeScreen = () => {
                 marginHorizontal: 10,
                 marginVertical: 10,
               }}
-            />{user.userInfo? (<Button 
+            /><Button 
               onPress={handlerLogout}
               title='Cerrar sesión'
               buttonStyle={{
               borderColor: '#fff',
+              color:'red',
+              fontFamily:'Bebas'
             }}
             type="outline"
             titleStyle={{ color: '#fff' }}
@@ -69,21 +56,7 @@ const HomeScreen = () => {
               width: 130,
               marginHorizontal: 10,
               marginVertical: 10,
-            }} />) : (<Button
-              onPress={() => navigation.navigate('Login')}
-              title="Registrate"
-              buttonStyle={{
-                borderColor: '#fff',
-              }}
-              type="outline"
-              titleStyle={{ color: '#fff' }}
-              containerStyle={{
-                width: 130,
-                marginHorizontal: 10,
-                marginVertical: 10,
-              }}
-            />)}
-            
+            }} /> 
           </View>
       </ImageBackground>
     </View>
@@ -102,8 +75,7 @@ const styles = StyleSheet.create({
     padding: 8
   },
   title: {
-    fontSize: 46,
-    fontWeight: 'bold',
+    fontSize: 56,
     color: "#fff",
     marginBottom: 20,
     fontFamily: 'Bebas',
@@ -111,8 +83,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontFamily: 'Bebas',
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: 24,
     color: "#fff",
     textAlign: 'center',
     marginBottom: 35

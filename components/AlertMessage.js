@@ -33,17 +33,26 @@ const AlertMessage = () => {
         return (<View style={{flex: 1 / 10,
         justifyContent:'center',
         alignItems:'center',
-        width: '100%',}}><View style={{
+        width: '100%',
+        margin:8,
+       
+        }}>
+            <View style={{
+            flex:1,
+            justifyContent:'center',
+            alignItems:'center',
             width:'80%',
             height:'100%',
-            backgroundColor: colorAlert[alert.type]
+            backgroundColor: colorAlert[alert.type],
+            borderRadius:8
         }}>
             <Text style={{
                 fontSize:16,
                 fontWeight:'bold',
                 color:'white',
                 textAlign:'center',
-                marginTop:10,
+               
+              
             }}>{alert.message}</Text>
         </View></View>)
    

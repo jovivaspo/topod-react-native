@@ -22,8 +22,9 @@ const styles = StyleSheet.create({
 
         color:'#fff',
         fontSize:28,
-        fontWeight:'bold',
+        fontFamily:'Montserrat_Bold',
         padding:10,
+        paddingLeft:20
     }
     
 })

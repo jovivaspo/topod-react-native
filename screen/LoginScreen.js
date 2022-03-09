@@ -30,16 +30,18 @@ const styles = StyleSheet.create({
   },
   title:{
     fontSize:38,
-    fontWeight:'bold',
+    //fontWeight:'bold',
     textAlign:'center',
     color:'#fff',
-    marginTop:20
+    marginTop:50,
+    fontFamily:'Montserrat_Bold'
 },
 text:{
-  fontSize:16,
+  fontSize:14,
   textAlign:'center',
   color:'#fff',
-  margin:8
+  margin:8,
+  fontFamily:'Montserrat_Medium'
 }
 })
 

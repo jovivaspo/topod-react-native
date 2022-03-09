@@ -35,7 +35,7 @@ export const login = (form, setAlert, setForm, initialForm) => async (dispatch) 
             })
             return false
         }
-      /*  setAlert({
+      /* setAlert({
             open: true,
             type: 'success',
             message: res.message
@@ -54,7 +54,7 @@ export const login = (form, setAlert, setForm, initialForm) => async (dispatch) 
         setAlert({
             open: true,
             type: 'error',
-            message: 'Algo salió mal'
+            message: 'Algo salió mal, inténtelo de nuevo'
         })
     }
 }
@@ -82,11 +82,11 @@ export const register = (form, setAlert, setForm, initialForm) => async (dispatc
             return false
         }
 
-        setAlert({
+       /* setAlert({
             open: true,
             type: 'success',
             message: res.message
-        })
+        })*/
         const { userId, token, email } = res
         const userInfo = { userId, token, email }
         dispatch({ type: REGISTER, payload: { userId, token, email } })
