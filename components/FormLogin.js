@@ -112,7 +112,7 @@ const FormLogin = () => {
                                 onChangeText={(value) => setForm({ ...form, confirmPassword: value })}
                             />}
                             <View>
-                                <Button title={value ? 'Registrate' : 'Inicia sesión'} buttonStyle={styles.button} onPress={handlerSubmit} />
+                                <Button title={value ? 'Registrate' : 'Inicia sesión'} buttonStyle={styles.button}  onPress={handlerSubmit} />
                                 <Text style={{ textAlign: 'center' }}>{value ? '¿Ya tienes cuenta?' : '¿Eres nuevo?'}</Text>
                                 <Button title={value ? 'Inicia sesión' : 'Registrate'} buttonStyle={styles.button} onPress={() => setValue(!value)} />
                             </View>

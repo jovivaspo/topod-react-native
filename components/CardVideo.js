@@ -19,7 +19,8 @@ const CardVideo = ({ video }) => {
         }}>
             <Text style={{
                 color: '#fff',
-                fontWeight: 'bold'
+                padding:8,
+                fontFamily:'Montserrat_Bold'
             }}>{video.title}</Text>
             <Image source={{
                 uri: video.thumbnail
@@ -33,8 +34,8 @@ const CardVideo = ({ video }) => {
                 justifyContent: 'flex-start',
                 width: '80%'
             }}>
-                <Text style={{ color: '#fff', marginRight:8 }}>Duración: {secondsToString(video.duration)}</Text>
-                <Text style={{ color: '#fff', marginLeft:8 }}>Hace {video.uploaded}</Text>
+                <Text style={{ color: '#fff', marginRight:8, fontFamily:'Montserrat_Medium' }}>Duración: {secondsToString(video.duration)}</Text>
+                <Text style={{ color: '#fff', marginLeft:8, fontFamily:'Montserrat_Medium' }}>Hace {video.uploaded}</Text>
             </View>
             <View style={{
                 margin: 10,
@@ -44,7 +45,7 @@ const CardVideo = ({ video }) => {
                 width: '80%'
             }}>
                 <Image source={{ uri: video.channel.thumbnail }} style={{ width: 20, height: 20 }} />
-                <Text style={{ color: '#fff', marginLeft:8 }}>{video.channel.name}</Text>
+                <Text style={{ color: '#fff',fontFamily:'Montserrat_Medium', marginLeft:8 }}>{video.channel.name}</Text>
             </View>
             <View style={{
                 margin: 10,
@@ -52,7 +53,7 @@ const CardVideo = ({ video }) => {
                 justifyContent: 'flex-start',
                 width: '80%'
             }}>
-                <Button title="Convertir" buttonStyle={{ backgroundColor: '#CEA858' }}
+                <Button title="Convertir" buttonStyle={{ backgroundColor: '#CEA858' }} titleStyle={{fontFamily:'Montserrat_Medium'}}
                     onPress={handlerConvert}
                 />
             </View>

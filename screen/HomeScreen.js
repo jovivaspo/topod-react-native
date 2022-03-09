@@ -31,27 +31,25 @@ const HomeScreen = () => {
               onPress={() => navigation.navigate('Buscar')}
               title="Busca tu video"
               buttonStyle={{
-                borderColor: '#fff',
-                color:'red',
-                fontFamily:'Bebas'
+                borderColor: '#fff', 
               }}
+             
               type="outline"
-              titleStyle={{ color: '#fff' }}
+              titleStyle={{ color: '#fff', fontFamily:'Bebas' }}
               containerStyle={{
                 width: 130,
                 marginHorizontal: 10,
                 marginVertical: 10,
               }}
             /><Button 
-              onPress={handlerLogout}
-              title='Cerrar sesión'
+              onPress={()=>navigation.navigate('Playlist')}
+              title='Playlist'
               buttonStyle={{
               borderColor: '#fff',
-              color:'red',
-              fontFamily:'Bebas'
+
             }}
             type="outline"
-            titleStyle={{ color: '#fff' }}
+            titleStyle={{ color: '#fff', fontFamily:'Bebas' }}
             containerStyle={{
               width: 130,
               marginHorizontal: 10,

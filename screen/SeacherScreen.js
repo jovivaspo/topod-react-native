@@ -27,11 +27,10 @@ const styles = StyleSheet.create({
     alignItems:'center'
   },
   title: {
-    fontSize: 36,
-    fontWeight: 'bold',
+    fontSize: 32,
     color: "#fff",
     marginTop: 20,
-    fontFamily: 'Bebas',
+    fontFamily: 'Montserrat_Bold',
     textAlign: 'center'
   }
 })
