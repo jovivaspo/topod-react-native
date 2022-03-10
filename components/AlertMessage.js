@@ -8,6 +8,7 @@ const AlertMessage = () => {
     const colorAlert = {
         'error': 'red',
         'success': 'green',
+        'warning' : 'orange'
     }
 
     useEffect(()=>{
@@ -34,7 +35,8 @@ const AlertMessage = () => {
         justifyContent:'center',
         alignItems:'center',
         width: '100%',
-        margin:8,
+        marginTop:12,
+        marginBottom:8,
        
         }}>
             <View style={{

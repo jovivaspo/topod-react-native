@@ -6,6 +6,7 @@ export const urls = () =>{
 
     if(REACT_APP_MOOD === 'dev'){
         return {
+            URI_API: REACT_APP_URL_API_LOCAL,
             PODCASTS_ALL : `${REACT_APP_URL_API_LOCAL}/api/podcasts/all/`,
             LOGIN : `${REACT_APP_URL_API_LOCAL}/api/user/login`,
             REGISTER : `${REACT_APP_URL_API_LOCAL}/api/user/register`,
@@ -18,6 +19,7 @@ export const urls = () =>{
         }
     }else{
         return  {
+            URI_API: REACT_APP_URL_API,
             PODCASTS_ALL : '/api/podcasts/all/',
             LOGIN : `/api/user/login`,
             REGISTER : `/api/user/register`,
