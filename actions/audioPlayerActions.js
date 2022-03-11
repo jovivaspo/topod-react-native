@@ -1,6 +1,7 @@
 import { CURRENT_SONG, LOAD_SONGS, PLAYING, RESET } from "../types"
 import { helpHttp } from "../services/helpHttp"
 import {urls} from "../services/urlApi"
+import * as SecureStore from 'expo-secure-store';
 
 
 export const loadPlaylist = (user) => async (dispatch) =>{
@@ -26,10 +27,12 @@ export const loadPlaylist = (user) => async (dispatch) =>{
 export const loadSong = (id,title,duration) => async (dispatch) =>{
     if(!id){
         dispatch({type:CURRENT_SONG, payload:null})
-        localStorage.removeItem('currentSong')
+        //localStorage.removeItem('currentSong')
+        await SecureStore.deleteItemAsync('currentSong')
     }else{
         dispatch({type:CURRENT_SONG, payload:{id,title,duration}})
-        localStorage.setItem('currentSong', JSON.stringify({id,title,duration}))
+        //localStorage.setItem('currentSong', JSON.stringify({id,title,duration}))
+        await SecureStore.setItemAsync('currentSong', JSON.stringify({id,title,duration}) );
     }
     
 }
@@ -39,7 +42,8 @@ export const playSong = (isPlaying) => async (dispatch) =>{
 }
 
 export const reset = () => async (dispatch) => {
-    localStorage.removeItem('currentSong')
+    //localStorage.removeItem('currentSong')
+    await SecureStore.deleteItemAsync('currentSong')
     dispatch({type:RESET})
 }
 
