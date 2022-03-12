@@ -6,6 +6,7 @@ import { loadPlaylist } from '../actions/audioPlayerActions'
 import Tablelist from '../components/Tablelist'
 import AlertMessage from '../components/AlertMessage'
 import ProgressPercentege from '../components/ProgressPercentege'
+import Player from '../components/Player'
 
 
 const PlaylistScreen = () => {
@@ -16,6 +17,7 @@ const PlaylistScreen = () => {
   const podcasts = audioPlayer.playlist
 
 
+
   useEffect(() => {
     dispatch(loadPlaylist(user))
   }, [])
@@ -24,10 +26,9 @@ const PlaylistScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Your Playlist</Text>
-        {working && <ProgressPercentege/>}
-        {alert.open && <AlertMessage/>}
-        {podcasts && <Tablelist podcasts={podcasts} />}
-      
+      {working && <ProgressPercentege />}
+      {alert.open && <AlertMessage />}
+      {podcasts && <Tablelist podcasts={podcasts} />}
     </View>
   )
 }
@@ -37,8 +38,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#0D0D0D",
     alignItems: 'center',
-    justifyContent:'center'
-    
+    justifyContent: 'center',
+    zIndex: 1,
+
   },
   title: {
     fontSize: 32,

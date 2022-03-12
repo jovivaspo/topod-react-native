@@ -13,7 +13,7 @@ const RowPodcast = ({ item }) => {
     const audioPlayer = useSelector(state => state.audioPlayer)
     const dispatch = useDispatch()
 
-    const handlerSong = (id, title, duration) => {
+    const handlerSong = (id, title, duration, img) => {
 
         if (id === audioPlayer?.currentSong?.id) {
             if (audioPlayer.isPlaying === true) {
@@ -22,17 +22,17 @@ const RowPodcast = ({ item }) => {
                 dispatch(playSong(true))
             }
         } else {
-            dispatch(loadSong(id, title, duration))
+            dispatch(loadSong(id, title, duration, img))
             dispatch(playSong(true))
         }
 
     }
 
-    console.log(audioPlayer)
+   
 
     return (
 
-        <TouchableOpacity style={styles.containerRow} onPress={() => handlerSong(item.podcastId, item.title, item.duration)}>
+        <TouchableOpacity style={styles.containerRow} onPress={() => handlerSong(item.podcastId, item.title, item.duration, item.img)}>
             <View style={styles.img}>
                 <ImageBackground source={{ uri: item.img }} resize="cover" style={styles.itemImg} imageStyle={{ opacity: audioPlayer?.currentSong?.id === item.podcastId ? 0.5 : 1 }}>
                     {audioPlayer?.currentSong?.id === item.podcastId ? <Icon name={audioPlayer.isPlaying === true? 'pause-circle-outline' : "play-circle-outline"} size={42} color={'#CEA858'} /> : <></>}
