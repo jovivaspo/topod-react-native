@@ -1,12 +1,13 @@
 import { View, Text, StyleSheet } from 'react-native'
-import React, { useEffect, useContext } from 'react'
+import React, { useEffect, useContext, useState } from 'react'
 import { GlobalContext } from '../context/GlobalContext'
 import { useDispatch, useSelector } from 'react-redux'
 import { loadPlaylist } from '../actions/audioPlayerActions'
 import Tablelist from '../components/Tablelist'
 import AlertMessage from '../components/AlertMessage'
 import ProgressPercentege from '../components/ProgressPercentege'
-import Player from '../components/Player'
+import ModalSong from '../components/ModalSong'
+import { useModal } from '../useHooks/useModal'
 
 
 const PlaylistScreen = () => {
@@ -15,13 +16,13 @@ const PlaylistScreen = () => {
   const audioPlayer = useSelector(state => state.audioPlayer)
   const user = useSelector(state => state.user)
   const podcasts = audioPlayer.playlist
-
-
+  const { modalVisible } = useModal()
 
   useEffect(() => {
     dispatch(loadPlaylist(user))
   }, [])
 
+  console.log(modalVisible)
 
   return (
     <View style={styles.container}>
@@ -29,6 +30,7 @@ const PlaylistScreen = () => {
       {working && <ProgressPercentege />}
       {alert.open && <AlertMessage />}
       {podcasts && <Tablelist podcasts={podcasts} />}
+     { modalVisible && <ModalSong modalVisible={modalVisible}/>}
     </View>
   )
 }

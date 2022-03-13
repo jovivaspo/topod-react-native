@@ -1,77 +1,15 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
-import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import Icon from 'react-native-vector-icons/Ionicons'
-import { urls } from '../services/urlApi';
-import { Audio } from 'expo-av'
-import { playSong } from '../actions/audioPlayerActions';
+import { usePlayer } from '../useHooks/usePlayer'
+import { useContext } from 'react'
+import { GlobalContext } from '../context/GlobalContext'
+
 
 const Player = () => {
   const audioPlayer = useSelector(state => state.audioPlayer)
-  const [player, setPlayer] = useState()
-  const [podcast, setPodcast] = useState()
-  const dispatch = useDispatch()
-
-  const loadSound = async () => {
-
-    try {
-
-      if (audioPlayer.currentSong.id === podcast) {
-
-        return false
-
-      }
-
-        if(player){
-          await player.unloadAsync()
-        }
-
-        const { sound } = await Audio.Sound.createAsync(
-          { uri: `${urls().PLAYER}${audioPlayer.currentSong.id}` },
-          { shouldPlay: true }
-        )
-
-        setPlayer(sound)
-        setPodcast(audioPlayer.currentSong.id)
-
-        await sound.loadAsync()
-
-      
-
-      } catch (err) {
-        console.log(err)
-      }
-
-    
-
-  }
-
-  const controlPlayer = async () => {
-
-    if (audioPlayer.isPlaying === true) {
-      dispatch(playSong(false))
-      await player.pauseAsync()
-
-    } else {
-      dispatch(playSong(true))
-      await player.playAsync()
-
-    }
-  }
-
-  useEffect(() => {
-      loadSound()
-  }, [audioPlayer])
-
-  useEffect(() => {
-    return player
-      ? () => {
-        //console.log('Unloading Sound');
-        player.unloadAsync();
-      }
-      : undefined;
-  }, [player]);
-
+  const {loading} = useContext(GlobalContext)
+  const {controlPlayer} = usePlayer()
  
   return (
     <View>
@@ -81,10 +19,9 @@ const Player = () => {
           <Text style={styles.title}>{audioPlayer.currentSong.title}</Text>
         </View>
         <TouchableOpacity style={styles.icon} onPress={controlPlayer}>
-          <Icon name={audioPlayer.isPlaying === true ? 'pause-circle-outline' : "play-circle-outline"} size={35} color={'#fff'} />
+         {!loading &&  <Icon name={  (audioPlayer.isPlaying === true? 'pause-circle-outline' : "play-circle-outline")} size={35} color={'#fff'} />}
         </TouchableOpacity>
       </View>
-
     </View>
   )
 }

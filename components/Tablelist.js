@@ -3,7 +3,7 @@ import React from 'react'
 import RowPodcast from './RowPodcast'
 
 const Tablelist = ({ podcasts }) => {
-    const renderItem = (({ item }) => <RowPodcast item={item} />)
+    const renderItem = (({ item }) => <RowPodcast item={item}/>)
     return (
         <View style={{
             flex: 1,
