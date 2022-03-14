@@ -2,8 +2,8 @@ import { View, Text, FlatList } from 'react-native'
 import React from 'react'
 import RowPodcast from './RowPodcast'
 
-const Tablelist = ({ podcasts }) => {
-    const renderItem = (({ item }) => <RowPodcast item={item}/>)
+const Tablelist = ({ podcasts, handlerModal }) => {
+    const renderItem = (({ item }) => <RowPodcast item={item} handlerModal={handlerModal}/>)
     return (
         <View style={{
             flex: 1,

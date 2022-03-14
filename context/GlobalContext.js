@@ -14,7 +14,7 @@ const GlobalProvider = ({ children }) => {
     const [videos, setVideos] = useState([])
     const [progress,setProgress]= useState(0)
     const [working, setWorking] = useState(false)
-    const [player, setPlayer] = useState()
+    const [player, setPlayer] = useState(null)
 
 
     const data = { alert, setAlert, initialAlert, loading, setLoading, videos, setVideos, progress, setProgress,working, setWorking, player, setPlayer}

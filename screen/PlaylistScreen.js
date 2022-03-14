@@ -1,36 +1,107 @@
 import { View, Text, StyleSheet } from 'react-native'
-import React, { useEffect, useContext, useState } from 'react'
+import React, { useEffect, useContext } from 'react'
 import { GlobalContext } from '../context/GlobalContext'
 import { useDispatch, useSelector } from 'react-redux'
-import { loadPlaylist } from '../actions/audioPlayerActions'
+import { loadPlaylist, loadSong } from '../actions/audioPlayerActions'
 import Tablelist from '../components/Tablelist'
 import AlertMessage from '../components/AlertMessage'
 import ProgressPercentege from '../components/ProgressPercentege'
-import ModalSong from '../components/ModalSong'
+import Modal from '../components/Modal'
 import { useModal } from '../useHooks/useModal'
+import { urls } from '../services/urlApi'
+import * as SecureStore from 'expo-secure-store';
+import { helpHttp } from '../services/helpHttp'
+import Progress from '../components/Progress'
+
+
 
 
 const PlaylistScreen = () => {
   const dispatch = useDispatch()
-  const { working, alert } = useContext(GlobalContext)
+  const { working, alert, setAlert, setWorking, setLoading, loading, setPlayer, player } = useContext(GlobalContext)
   const audioPlayer = useSelector(state => state.audioPlayer)
   const user = useSelector(state => state.user)
   const podcasts = audioPlayer.playlist
-  const { modalVisible } = useModal()
+  const { visible, toggleOverlay, handlerModal, content } = useModal()
 
   useEffect(() => {
     dispatch(loadPlaylist(user))
   }, [])
 
-  console.log(modalVisible)
+  const handlerDelete = async (podcastId,id) => {
+    console.log('Borrando')
+    if (working) {
+      setAlert({
+        open: true,
+        type: 'warning',
+        message: 'Espere a que termine el proceso anterior'
+      })
+      return false
+    }
+
+
+    const currentSong = await SecureStore.getItemAsync('currentSong');
+    console.log(currentSong.id, podcastId)
+    //const currentSong = JSON.parse(localStorage.getItem('currentSong'))
+    if (currentSong) {
+      if (podcastId === currentSong.id) {
+        dispatch(loadSong())
+        if (audioPlayer.isPlaying === true) {
+          dispatch(playSong(false))
+          await player.pauseAsync()
+          await player.unloadAsync()
+        }
+
+      }
+    }
+
+    setAlert({
+      open: true,
+      type: 'warning',
+      message: 'Borrando Podcast'
+    })
+
+    setLoading(true)
+    setWorking(true)
+
+    helpHttp().del(`${urls().DELETE}${id}`, {
+      headers: {
+        Authorization: `Bearer ${user.userInfo.token}`
+      }
+    })
+      .then(res => {
+        //console.log(res)
+        if (res.error) {
+          setAlert({
+            open: true,
+            type: 'error',
+            message: res.error
+          })
+          setWorking(false)
+          return false
+        }
+        setLoading(false)
+        setWorking(false)
+        dispatch(loadPlaylist(user))
+        setAlert({
+          open: true,
+          type: 'success',
+          message: res.message
+        })
+      })
+
+  }
+
+
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Your Playlist</Text>
-      {working && <ProgressPercentege />}
+      {working && !loading && <ProgressPercentege />}
+      {loading && <Progress />}
       {alert.open && <AlertMessage />}
-      {podcasts && <Tablelist podcasts={podcasts} />}
-     { modalVisible && <ModalSong modalVisible={modalVisible}/>}
+      {podcasts && <Tablelist podcasts={podcasts} handlerModal={handlerModal} />}
+      <Modal visible={visible} toggleOverlay={toggleOverlay} content={content} handlerDelete={handlerDelete} />
     </View>
   )
 }

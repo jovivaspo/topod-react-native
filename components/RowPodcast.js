@@ -1,17 +1,14 @@
 import { View, Text, Image, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native'
 import React, { useContext } from 'react'
 import secondsToString from '../services/secontToString'
-import { timeAgo } from '../services/ago'
-import { useSelector, useDispatch } from 'react-redux'
-import { playSong, loadSong } from '../actions/audioPlayerActions'
+import { useSelector } from 'react-redux'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { usePlayer } from '../useHooks/usePlayer'
 import { GlobalContext } from '../context/GlobalContext'
-import { useModal } from '../useHooks/useModal'
 
 
 
-const RowPodcast = ({ item }) => {
+const RowPodcast = ({ item, handlerModal}) => {
 
     const audioPlayer = useSelector(state => state.audioPlayer)
    
@@ -19,7 +16,6 @@ const RowPodcast = ({ item }) => {
 
     const {loading} = useContext(GlobalContext)
 
-    const {handlerModal} = useModal()
 
     return (
         <View  style={styles.containerRow}>
@@ -44,7 +40,7 @@ const RowPodcast = ({ item }) => {
                 </View>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={()=>handlerModal(item.podcastId, item.title, item.img)}>
+            <TouchableOpacity onPress={()=>handlerModal(item.podcastId, item.title, item.img, item.id)}>
                 <Icon name="ellipsis-vertical-outline" size={42}  color={'#fff'}  />
             </TouchableOpacity>
         </View>
