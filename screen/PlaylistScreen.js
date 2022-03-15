@@ -2,18 +2,15 @@ import { View, Text, StyleSheet } from 'react-native'
 import React, { useEffect, useContext } from 'react'
 import { GlobalContext } from '../context/GlobalContext'
 import { useDispatch, useSelector } from 'react-redux'
-import { loadPlaylist, loadSong } from '../actions/audioPlayerActions'
+import { loadPlaylist, loadSong, playSong } from '../actions/audioPlayerActions'
 import Tablelist from '../components/Tablelist'
 import AlertMessage from '../components/AlertMessage'
 import ProgressPercentege from '../components/ProgressPercentege'
 import Modal from '../components/Modal'
 import { useModal } from '../useHooks/useModal'
 import { urls } from '../services/urlApi'
-import * as SecureStore from 'expo-secure-store';
 import { helpHttp } from '../services/helpHttp'
 import Progress from '../components/Progress'
-
-
 
 
 const PlaylistScreen = () => {
@@ -28,8 +25,8 @@ const PlaylistScreen = () => {
     dispatch(loadPlaylist(user))
   }, [])
 
-  const handlerDelete = async (podcastId,id) => {
-    console.log('Borrando')
+  const handlerDelete = async (podcastId, id) => {
+    
     if (working) {
       setAlert({
         open: true,
@@ -39,71 +36,65 @@ const PlaylistScreen = () => {
       return false
     }
 
+    if (podcastId === audioPlayer?.currentSong?.id) {
 
-    const currentSong = await SecureStore.getItemAsync('currentSong');
-    console.log(currentSong.id, podcastId)
-    //const currentSong = JSON.parse(localStorage.getItem('currentSong'))
-    if (currentSong) {
-      if (podcastId === currentSong.id) {
-        dispatch(loadSong())
-        if (audioPlayer.isPlaying === true) {
-          dispatch(playSong(false))
-          await player.pauseAsync()
-          await player.unloadAsync()
-        }
-
-      }
+      dispatch(loadSong())
+      dispatch(playSong(false))
+      player.pauseAsync()
+      .then(()=>player.unloadAsync())
+      .then(()=>setPlayer(null))
+     
     }
 
-    setAlert({
-      open: true,
-      type: 'warning',
-      message: 'Borrando Podcast'
-    })
+  setAlert({
+    open: true,
+    type: 'warning',
+    message: 'Borrando Podcast'
+  })
 
-    setLoading(true)
-    setWorking(true)
+  setLoading(true)
+  setWorking(true)
 
-    helpHttp().del(`${urls().DELETE}${id}`, {
-      headers: {
-        Authorization: `Bearer ${user.userInfo.token}`
-      }
-    })
-      .then(res => {
-        //console.log(res)
-        if (res.error) {
-          setAlert({
-            open: true,
-            type: 'error',
-            message: res.error
-          })
-          setWorking(false)
-          return false
-        }
-        setLoading(false)
-        setWorking(false)
-        dispatch(loadPlaylist(user))
+  helpHttp().del(`${urls().DELETE}${id}`, {
+    headers: {
+      Authorization: `Bearer ${user.userInfo.token}`
+    }
+  })
+    .then(res => {
+      //console.log(res)
+      if (res.error) {
         setAlert({
           open: true,
-          type: 'success',
-          message: res.message
+          type: 'error',
+          message: res.error
         })
+        setWorking(false)
+        return false
+      }
+      setLoading(false)
+      setWorking(false)
+      dispatch(loadPlaylist(user))
+      setAlert({
+        open: true,
+        type: 'success',
+        message: res.message
       })
+    })
 
-  }
+}
 
 
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Your Playlist</Text>
-      {working && !loading && <ProgressPercentege />}
-      {loading && <Progress />}
-      {alert.open && <AlertMessage />}
-      {podcasts && <Tablelist podcasts={podcasts} handlerModal={handlerModal} />}
-      <Modal visible={visible} toggleOverlay={toggleOverlay} content={content} handlerDelete={handlerDelete} />
-    </View>
-  )
+return (
+  <View style={styles.container}>
+    <Text style={styles.title}>Your Playlist</Text>
+    {working && !loading && <ProgressPercentege />}
+    {loading && <Progress />}
+    {alert.open && <AlertMessage />}
+    {podcasts && <Tablelist podcasts={podcasts} handlerModal={handlerModal} />}
+    <Modal visible={visible} toggleOverlay={toggleOverlay} content={content} handlerDelete={handlerDelete} />
+  </View>
+)
 }
 
 const styles = StyleSheet.create({
