@@ -11,6 +11,9 @@ import { useModal } from '../useHooks/useModal'
 import { urls } from '../services/urlApi'
 import { helpHttp } from '../services/helpHttp'
 import Progress from '../components/Progress'
+import * as FileSystem from 'expo-file-system';
+import * as MediaLibrary from 'expo-media-library';
+
 
 
 const PlaylistScreen = () => {
@@ -26,7 +29,7 @@ const PlaylistScreen = () => {
   }, [])
 
   const handlerDelete = async (podcastId, id) => {
-    
+
     if (working) {
       setAlert({
         open: true,
@@ -41,78 +44,185 @@ const PlaylistScreen = () => {
       dispatch(loadSong())
       dispatch(playSong(false))
       player.pauseAsync()
-      .then(()=>player.unloadAsync())
-      .then(()=>setPlayer(null))
-     
+        .then(() => player.unloadAsync())
+        .then(() => setPlayer(null))
+
     }
 
-  setAlert({
-    open: true,
-    type: 'warning',
-    message: 'Borrando Podcast'
-  })
+    setAlert({
+      open: true,
+      type: 'warning',
+      message: 'Borrando Podcast'
+    })
 
-  setLoading(true)
-  setWorking(true)
+    setLoading(true)
+    setWorking(true)
 
-  helpHttp().del(`${urls().DELETE}${id}`, {
-    headers: {
-      Authorization: `Bearer ${user.userInfo.token}`
+    helpHttp().del(`${urls().DELETE}${id}`, {
+      headers: {
+        Authorization: `Bearer ${user.userInfo.token}`
+      }
+    })
+      .then(res => {
+        //console.log(res)
+        if (res.error) {
+          setAlert({
+            open: true,
+            type: 'error',
+            message: res.error
+          })
+          setWorking(false)
+          return false
+        }
+        setLoading(false)
+        setWorking(false)
+        dispatch(loadPlaylist(user))
+        setAlert({
+          open: true,
+          type: 'success',
+          message: res.message
+        })
+      })
+
+  }
+
+  const saveFile = async (fileUri) => {
+    try{
+      console.log('guardando')
+      const  res  = await MediaLibrary.requestPermissionsAsync(false)
+      console.log(res)
+      if (status === 'granted') {
+        const asset = await MediaLibrary.createAssetAsync(fileUri)
+        await MediaLibrary.createAlbumAsync('Download', asset, false)
+        setLoading(false)
+        setWorking(false)
+      }else{
+        setLoading(false)
+        setWorking(false)
+      }
+    }catch(err){
+      setWorking(false)
+      setLoading(false)
+      console.log(err)
     }
-  })
-    .then(res => {
-      //console.log(res)
-      if (res.error) {
+   
+  }
+
+  const handlerDownload = async(id, title) => {
+    if (working) {
+      setAlert({
+        open: true,
+        type: 'warning',
+        message: 'Espere a que termine el proceso anterior'
+      })
+      return false
+    }
+    setWorking(true)
+    setLoading(true)
+    setAlert({
+      open: true,
+      type: 'warning',
+      message: 'Iniciando descarga'
+    })
+/*
+    fetch(`${urls().DOWNLOAD}${id}`, {
+      headers: {
+        responseType: 'blob',
+        Authorization: `Bearer ${user.userInfo.token}`
+      }
+    })
+      .then(response => {
+        //console.log(response)
+        if (!response.ok) {
+          let error = new Error('Ocurrió un error al descargar')
+          console.log('error')
+          throw error
+        }
+        else return response.blob()
+      })
+      .then(data => {
+        // console.log(data)
+        if (!data || data.type === "application/json") {
+          setWorking(false)
+          setLoading(false)
+          console.log('error')
+          let error = new Error('Ocurrió un error al descargar')
+          throw error
+        } else {
+          setAlert({
+            open: true,
+            type: 'success',
+            message: 'Descargando archivo'
+          })
+          fileDownload(data, `${title}.mp3`)
+          setLoading(false)
+          setWorking(false)
+        }
+      })
+      .catch(error => {
+        console.log('error')
         setAlert({
           open: true,
           type: 'error',
-          message: res.error
+          message: error.message
         })
         setWorking(false)
-        return false
+        setLoading(false)
+      })*/
+
+ 
+      try {
+        const downloadFile = FileSystem.createDownloadResumable(
+          `${urls().DOWNLOAD}${id}`,
+          FileSystem.documentDirectory + `${title}.mp3`,
+          { responseType: 'blob',
+          Authorization: `Bearer ${user.userInfo.token}` }
+        )
+        const { uri } = await downloadFile.downloadAsync()
+        console.log(uri)
+        await saveFile(uri)
+      }catch(err){
+        console.log(err)
+        setWorking(false)
+        setLoading(false)
+        setAlert({
+          open: true,
+          type: 'error',
+          message: 'Error al descargar'
+        })
       }
-      setLoading(false)
-      setWorking(false)
-      dispatch(loadPlaylist(user))
-      setAlert({
-        open: true,
-        type: 'success',
-        message: res.message
-      })
-    })
 
 }
 
 
-
-return (
-  <View style={styles.container}>
-    <Text style={styles.title}>Your Playlist</Text>
-    {working && !loading && <ProgressPercentege />}
-    {loading && <Progress />}
-    {alert.open && <AlertMessage />}
-    {podcasts && <Tablelist podcasts={podcasts} handlerModal={handlerModal} />}
-    <Modal visible={visible} toggleOverlay={toggleOverlay} content={content} handlerDelete={handlerDelete} />
-  </View>
-)
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#0D0D0D",
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 1,
-
-  },
-  title: {
-    fontSize: 32,
-    color: "#fff",
-    marginTop: 20,
-    fontFamily: 'Montserrat_Bold',
-    textAlign: 'center'
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>Your Playlist</Text>
+        {working && !loading && <ProgressPercentege />}
+        {loading && <Progress />}
+        {alert.open && <AlertMessage />}
+        {podcasts && <Tablelist podcasts={podcasts} handlerModal={handlerModal} />}
+        <Modal visible={visible} toggleOverlay={toggleOverlay} content={content} handlerDelete={handlerDelete} handlerDownload={handlerDownload} />
+      </View>
+    )
   }
-})
 
-export default PlaylistScreen
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: "#0D0D0D",
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 1,
+
+    },
+    title: {
+      fontSize: 32,
+      color: "#fff",
+      marginTop: 20,
+      fontFamily: 'Montserrat_Bold',
+      textAlign: 'center'
+    }
+  })
+
+  export default PlaylistScreen

@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 
 
 
-const Modal = ({ visible, toggleOverlay, content, handlerDelete }) => {
+const Modal = ({ visible, toggleOverlay, content, handlerDelete, handlerDownload }) => {
     
 
     return (
@@ -22,7 +22,9 @@ const Modal = ({ visible, toggleOverlay, content, handlerDelete }) => {
                     <Icon name="trash-outline" size={25} color={'#fff'} />
                     <Text style={styles.secondText}>Borrar</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.viewSecondContent} >
+                <TouchableOpacity style={styles.viewSecondContent} onPress={()=>{
+                    toggleOverlay()
+                    handlerDownload(content?.podcastId, content?.title)}}>
                     <Icon name="cloud-download-outline" size={22} color={'#fff'} />
                     <Text style={styles.secondText}>Descargar</Text>
                 </TouchableOpacity>
