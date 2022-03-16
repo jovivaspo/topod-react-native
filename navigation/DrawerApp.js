@@ -12,6 +12,7 @@ import { View } from 'react-native';
 import Player from '../components/Player';
 
 
+
 const Drawer = createDrawerNavigator();
 
 const DrawerApp = () => {

@@ -11,8 +11,8 @@ import { useModal } from '../useHooks/useModal'
 import { urls } from '../services/urlApi'
 import { helpHttp } from '../services/helpHttp'
 import Progress from '../components/Progress'
-import * as FileSystem from 'expo-file-system';
-import * as MediaLibrary from 'expo-media-library';
+import * as FileSystem from 'expo-file-system'
+import * as MediaLibrary from 'expo-media-library'
 
 
 
@@ -27,6 +27,8 @@ const PlaylistScreen = () => {
   useEffect(() => {
     dispatch(loadPlaylist(user))
   }, [])
+
+  
 
   const handlerDelete = async (podcastId, id) => {
 
@@ -88,12 +90,11 @@ const PlaylistScreen = () => {
 
   const saveFile = async (fileUri) => {
     try{
-      console.log('guardando')
-      const  res  = await MediaLibrary.requestPermissionsAsync(false)
-      console.log(res)
+      const  {status}  = await MediaLibrary.requestPermissionsAsync()
       if (status === 'granted') {
+        console.log('guardando')
         const asset = await MediaLibrary.createAssetAsync(fileUri)
-        await MediaLibrary.createAlbumAsync('Download', asset, false)
+       
         setLoading(false)
         setWorking(false)
       }else{
@@ -103,6 +104,11 @@ const PlaylistScreen = () => {
     }catch(err){
       setWorking(false)
       setLoading(false)
+      setAlert({
+        open: true,
+        type: 'error',
+        message: 'Error al descargar'
+      })
       console.log(err)
     }
    
@@ -170,17 +176,17 @@ const PlaylistScreen = () => {
         setLoading(false)
       })*/
 
- 
+      console.log(`${urls().DOWNLOAD}${id}`)
       try {
         const downloadFile = FileSystem.createDownloadResumable(
-          `${urls().DOWNLOAD}${id}`,
+         `${urls().DOWNLOAD}${id}`,
           FileSystem.documentDirectory + `${title}.mp3`,
-          { responseType: 'blob',
-          Authorization: `Bearer ${user.userInfo.token}` }
+         { headers:{ responseType: 'blob',
+          Authorization: `Bearer ${user.userInfo.token}` }}
         )
-        const { uri } = await downloadFile.downloadAsync()
-        console.log(uri)
-        await saveFile(uri)
+        const res = await downloadFile.downloadAsync()
+        console.log(res)
+        await saveFile(res.uri)
       }catch(err){
         console.log(err)
         setWorking(false)
