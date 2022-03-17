@@ -43,6 +43,16 @@ const usePlayer = () => {
 
                 dispatch(loadSong(id, title, duration, img))
 
+                await Audio.setAudioModeAsync({
+                    staysActiveInBackground: true,
+                   // interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
+                   // shouldDuckAndroid: true,
+                  //  playThroughEarpieceAndroid: true,
+                  //  allowsRecordingIOS: true,
+                   // interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+                   // playsInSilentModeIOS: true,
+                  });
+
                 const { sound } = await Audio.Sound.createAsync(
                     { uri: `${urls().PLAYER}${id}` },
                     { shouldPlay: true }

@@ -8,6 +8,7 @@ import io from "socket.io-client"
 import { useSelector, useDispatch } from 'react-redux';
 import { GlobalContext } from '../context/GlobalContext'
 import { loadPlaylist } from '../actions/audioPlayerActions'
+import { schedulePushNotification } from "../services/notifications"
 
 const CardVideo = ({ video }) => {
 
@@ -34,7 +35,7 @@ const CardVideo = ({ video }) => {
             video.date = new Date
             const duration = parseInt(video.duration)
 
-            const socket = io(urls().URI_API, {  //urls().URI_API 'https://topodcast.herokuapp.com'
+            const socket = io(urls().URI_API, {  
                 auth: { token },
                 query: { duration }
             })
@@ -81,7 +82,7 @@ const CardVideo = ({ video }) => {
                 setProgress(percentage.toFixed(0))
             })
 
-            socket.on('finish', message => {
+            socket.on('finish', async (message) => {
                 setAlert({
                     open: true,
                     type: 'success',
@@ -91,6 +92,7 @@ const CardVideo = ({ video }) => {
                 socket.disconnect()
                 setWorking(false)
                 setProgress(0)
+                await schedulePushNotification(message, video.title, '/Playlist')
 
             })
 
