@@ -7,6 +7,7 @@ import useFonts from '../useHooks/useFonts'
 
 const Navigator = () => {
     const [IsReady, SetIsReady] = React.useState(false)
+    
     const LoadFonts = async () => {
         await useFonts()
       }

@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, } from 'react-native'
 import React, { useEffect, useContext } from 'react'
 import { GlobalContext } from '../context/GlobalContext'
 import { useDispatch, useSelector } from 'react-redux'
-import { loadPlaylist, loadSong, playSong } from '../actions/audioPlayerActions'
+import { changeStatus, loadPlaylist, reset, resetPlayer } from '../actions/audioPlayerActions'
 import Tablelist from '../components/Tablelist'
 import AlertMessage from '../components/AlertMessage'
 import ProgressPercentege from '../components/ProgressPercentege'
@@ -15,19 +15,19 @@ import * as FileSystem from 'expo-file-system'
 import * as MediaLibrary from 'expo-media-library'
 import {schedulePushNotification} from '../services/notifications'
 
+
 const PlaylistScreen = () => {
   const dispatch = useDispatch()
-  const { working, alert, setAlert, setWorking, setLoading, loading, setPlayer, player } = useContext(GlobalContext)
-  const audioPlayer = useSelector(state => state.audioPlayer)
+  const { working, alert, setAlert, setWorking, setLoading, loading } = useContext(GlobalContext)
   const user = useSelector(state => state.user)
-  const podcasts = audioPlayer.playlist
+  const {currentSong, playbackObj, statusPlayback, playlist} = useSelector(state => state.audioPlayer)
   const { visible, toggleOverlay, handlerModal, content } = useModal()
+  
 
  
 useEffect(() => {
     dispatch(loadPlaylist(user))
   }, [])
-
 
 
   const handlerDelete = async (podcastId, id) => {
@@ -42,15 +42,8 @@ useEffect(() => {
       return false
     }
 
-    if (podcastId === audioPlayer?.currentSong?.id) {
-
-      dispatch(loadSong())
-      dispatch(playSong(false))
-      player.pauseAsync()
-        .then(() => player.unloadAsync())
-        .then(() => setPlayer(null))
-
-    }
+    setLoading(true)
+    setWorking(true)
 
     setAlert({
       open: true,
@@ -58,8 +51,9 @@ useEffect(() => {
       message: 'Borrando Podcast'
     })
 
-    setLoading(true)
-    setWorking(true)
+    if (podcastId === currentSong?.id) {
+     dispatch(resetPlayer(playbackObj, statusPlayback))
+    }
 
     helpHttp().del(`${urls().DELETE}${id}`, {
       headers: {
@@ -169,7 +163,7 @@ useEffect(() => {
       {working && !loading && <ProgressPercentege />}
       {loading && <Progress />}
       {alert.open && <AlertMessage />}
-      {podcasts && <Tablelist podcasts={podcasts} handlerModal={handlerModal} />}
+      {playlist && <Tablelist podcasts={playlist} handlerModal={handlerModal} />}
       <Modal visible={visible} toggleOverlay={toggleOverlay} content={content} handlerDelete={handlerDelete} handlerDownload={handlerDownload} />
     </View>
   )
@@ -178,9 +172,8 @@ useEffect(() => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems:'center',
     backgroundColor: "#0D0D0D",
-    alignItems: 'center',
-    justifyContent: 'center',
     zIndex: 1,
 
   },

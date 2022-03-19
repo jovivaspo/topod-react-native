@@ -11,8 +11,9 @@ const initialStates = {
     user:{userInfo:null},
     audioPlayer:{
         playlist:[],
-        //currentSong:songStorage,
-        isPlaying:false
+        currentSong:null,
+        playbackObj:null,
+        statusPlayback:null
     }
 }
 

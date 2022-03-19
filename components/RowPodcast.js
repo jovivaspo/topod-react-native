@@ -10,24 +10,24 @@ import { GlobalContext } from '../context/GlobalContext'
 
 const RowPodcast = ({ item, handlerModal}) => {
 
-    const audioPlayer = useSelector(state => state.audioPlayer)
+    const {currentSong, statusPlayback} = useSelector(state => state.audioPlayer)
    
-    const {handlerSong} = usePlayer()
+    const {handlerPlayer} = usePlayer()
 
     const {loading} = useContext(GlobalContext)
 
 
     return (
         <View  style={styles.containerRow}>
-            <TouchableOpacity style={{flex:1, flexDirection: 'row'} } onPress={() => handlerSong(item.podcastId, item.title, item.duration, item.img)}>
+            <TouchableOpacity style={{flex:1, flexDirection: 'row'} } onPress={() => handlerPlayer(item.podcastId, item.title, item.duration, item.img)}>
                 <View style={styles.img}>
-                    <ImageBackground source={{ uri: item.img }} resize="cover" style={styles.itemImg} imageStyle={{ opacity: audioPlayer?.currentSong?.id === item.podcastId ? 0.5 : 1 }}>
-                        {audioPlayer?.currentSong?.id === item.podcastId && !loading ? <Icon name={audioPlayer.isPlaying === true? 'pause-circle-outline' : "play-circle-outline"} size={42} color={'#CEA858'} /> : <></>}
+                    <ImageBackground source={{ uri: item.img }} resize="cover" style={styles.itemImg} imageStyle={{ opacity: currentSong?.id === item.podcastId ? 0.5 : 1 }}>
+                        {currentSong?.id === item.podcastId && !loading ? <Icon name={statusPlayback.isPlaying === true? 'pause-circle-outline' : "play-circle-outline"} size={42} color={'#CEA858'} /> : <></>}
                     </ImageBackground>
                 </View>
                 <View style={{ flex: 1, justifyContent: 'center', }}>
                     <Text style={{
-                        color: audioPlayer?.currentSong?.id === item.podcastId ? '#CEA858' : '#fff',
+                        color: currentSong?.id === item.podcastId ? '#CEA858' : '#fff',
                         fontFamily: 'Montserrat_Medium',
                         fontSize: 12,
                     }}>{item.title}</Text>
@@ -55,10 +55,7 @@ const styles = StyleSheet.create({
     containerRow: {
         flex: 1 / 9,
         flexDirection: 'row',
-        alignItems:'center',
-        borderBottomColor: '#fff',
-        borderWidth: 1,
-
+        alignItems:'center'
     },
     img: {
         width: 50,

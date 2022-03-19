@@ -4,22 +4,23 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import { usePlayer } from '../useHooks/usePlayer'
 import { useContext } from 'react'
 import { GlobalContext } from '../context/GlobalContext'
-
+import Slider from '@react-native-community/slider'
 
 const Player = () => {
-  const audioPlayer = useSelector(state => state.audioPlayer)
+  const {currentSong, statusPlayback} = useSelector(state => state.audioPlayer)
+  const {id, title, duration, img} = currentSong
   const {loading} = useContext(GlobalContext)
-  const {controlPlayer} = usePlayer()
- 
+  const {handlerPlayer} = usePlayer()
+
   return (
     <View>
       <View style={styles.containerPlayer}>
-        <Image source={{ uri: audioPlayer.currentSong.img }} style={styles.img} />
+        <Image source={{ uri: img }} style={styles.img} />
         <View style={{ flex: 1, justifyContent: 'center', height: '100%' }}>
-          <Text style={styles.title}>{audioPlayer.currentSong.title}</Text>
+          <Text style={styles.title}>{title}</Text>
         </View>
-        <TouchableOpacity style={styles.icon} onPress={controlPlayer}>
-         {!loading &&  <Icon name={  (audioPlayer.isPlaying === true? 'pause-circle-outline' : "play-circle-outline")} size={35} color={'#fff'} />}
+        <TouchableOpacity style={styles.icon} onPress={()=>handlerPlayer(id, title, duration, img)}>
+         {!loading &&  <Icon name={  (statusPlayback?.isPlaying === true? 'pause-circle-outline' : "play-circle-outline")} size={35} color={'#fff'} />}
         </TouchableOpacity>
       </View>
     </View>
