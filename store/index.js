@@ -13,7 +13,8 @@ const initialStates = {
         playlist:[],
         currentSong:null,
         playbackObj:null,
-        statusPlayback:null
+        statusPlayback:null,
+        loadingSong: false
     }
 }
 

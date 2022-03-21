@@ -1,63 +1,82 @@
 import { View, Text, ImageBackground, StyleSheet } from 'react-native'
-import React, {useEffect, useState} from 'react'
+import React from 'react'
 import ImageBackgroundHome from '../assets/Background-topodcast.webp'
 import { Button } from 'react-native-elements'
 import { useNavigation } from '@react-navigation/native'
 import { useSelector, useDispatch } from 'react-redux'
-import { loadUser, logout } from '../actions/userActions'
+import {  logout } from '../actions/userActions'
+import Player from '../components/Player'
 
 
 
 const HomeScreen = () => {
 
- 
+
   const navigation = useNavigation()
   const dispatch = useDispatch()
-  
-  
+  const {currentSong} = useSelector(state => state.audioPlayer)
 
-  const handlerLogout = () =>{
+
+
+  const handlerLogout = () => {
     dispatch(logout())
   }
-  
+
   return (
-    <View style={styles.container}>
-      <ImageBackground source={ImageBackgroundHome} resize="cover" style={styles.image} imageStyle=
-        {{ opacity: 0.3 }}>
-          <Text  style={styles.title}>TOPODCAST</Text>
+    <>
+      <View style={styles.container}>
+        <ImageBackground source={ImageBackgroundHome} resize="cover" style={styles.image} imageStyle=
+          {{ opacity: 0.3 }}>
+          <Text style={styles.title}>TOPODCAST</Text>
           <Text style={styles.subtitle}>DISFRUTA ESCUCHANDO TUS VÍDEOS FAVORITOS ALLÁ DONDE VAYAS</Text>
           <View style={styles.containerButton}>
             <Button
               onPress={() => navigation.navigate('Buscar')}
               title="Busca tu video"
               buttonStyle={{
-                borderColor: '#fff', 
+                borderColor: '#fff',
               }}
-             
+
               type="outline"
-              titleStyle={{ color: '#fff', fontFamily:'Bebas' }}
+              titleStyle={{ color: '#fff', fontFamily: 'Bebas' }}
               containerStyle={{
                 width: 130,
                 marginHorizontal: 10,
                 marginVertical: 10,
               }}
-            /><Button 
-              onPress={()=>navigation.navigate('Playlist')}
+            /><Button
+              onPress={() => navigation.navigate('Playlist')}
               title='Playlist'
               buttonStyle={{
-              borderColor: '#fff',
+                borderColor: '#fff',
 
-            }}
-            type="outline"
-            titleStyle={{ color: '#fff', fontFamily:'Bebas' }}
-            containerStyle={{
-              width: 130,
-              marginHorizontal: 10,
-              marginVertical: 10,
-            }} /> 
+              }}
+              type="outline"
+              titleStyle={{ color: '#fff', fontFamily: 'Bebas' }}
+              containerStyle={{
+                width: 130,
+                marginHorizontal: 10,
+                marginVertical: 10,
+              }} />
           </View>
-      </ImageBackground>
-    </View>
+        </ImageBackground>
+      </View>
+
+      {currentSong &&
+
+        (<View style={{
+          position: 'absolute',
+          bottom: 14,
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '100%',
+        }}>
+          <Player />
+        </View>)
+
+      }
+    </>
   )
 }
 const styles = StyleSheet.create({
@@ -89,8 +108,8 @@ const styles = StyleSheet.create({
   },
   containerButton: {
     flexDirection: 'row',
-    justifyContent:'center',
-    width:'100%'
+    justifyContent: 'center',
+    width: '100%'
   }
 })
 

@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, } from 'react-native'
 import React, { useEffect, useContext } from 'react'
 import { GlobalContext } from '../context/GlobalContext'
 import { useDispatch, useSelector } from 'react-redux'
-import { changeStatus, loadPlaylist, reset, resetPlayer } from '../actions/audioPlayerActions'
+import { loadPlaylist, resetPlayer } from '../actions/audioPlayerActions'
 import Tablelist from '../components/Tablelist'
 import AlertMessage from '../components/AlertMessage'
 import ProgressPercentege from '../components/ProgressPercentege'
@@ -13,19 +13,20 @@ import { helpHttp } from '../services/helpHttp'
 import Progress from '../components/Progress'
 import * as FileSystem from 'expo-file-system'
 import * as MediaLibrary from 'expo-media-library'
-import {schedulePushNotification} from '../services/notifications'
+import { schedulePushNotification } from '../services/notifications'
+import Player from '../components/Player'
 
 
 const PlaylistScreen = () => {
   const dispatch = useDispatch()
   const { working, alert, setAlert, setWorking, setLoading, loading } = useContext(GlobalContext)
   const user = useSelector(state => state.user)
-  const {currentSong, playbackObj, statusPlayback, playlist} = useSelector(state => state.audioPlayer)
+  const { currentSong, playbackObj, statusPlayback, playlist } = useSelector(state => state.audioPlayer)
   const { visible, toggleOverlay, handlerModal, content } = useModal()
-  
 
- 
-useEffect(() => {
+
+
+  useEffect(() => {
     dispatch(loadPlaylist(user))
   }, [])
 
@@ -52,7 +53,7 @@ useEffect(() => {
     })
 
     if (podcastId === currentSong?.id) {
-     dispatch(resetPlayer(playbackObj, statusPlayback))
+      dispatch(resetPlayer(playbackObj, statusPlayback))
     }
 
     helpHttp().del(`${urls().DELETE}${id}`, {
@@ -87,7 +88,7 @@ useEffect(() => {
     try {
       const { status } = await MediaLibrary.requestPermissionsAsync()
       if (status === 'granted') {
-        
+
         const asset = await MediaLibrary.createAssetAsync(fileUri)
         await schedulePushNotification('Descarga finalizada', title, fileUri)
       }
@@ -158,21 +159,37 @@ useEffect(() => {
 
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Your Playlist</Text>
-      {working && !loading && <ProgressPercentege />}
-      {loading && <Progress />}
-      {alert.open && <AlertMessage />}
-      {playlist && <Tablelist podcasts={playlist} handlerModal={handlerModal} />}
-      <Modal visible={visible} toggleOverlay={toggleOverlay} content={content} handlerDelete={handlerDelete} handlerDownload={handlerDownload} />
-    </View>
+    <>
+      <View style={styles.container}>
+        <Text style={styles.title}>Your Playlist</Text>
+        {working && !loading && <ProgressPercentege />}
+        {loading && <Progress />}
+        {alert.open && <AlertMessage />}
+        {playlist && <Tablelist podcasts={playlist} handlerModal={handlerModal} />}
+        <Modal visible={visible} toggleOverlay={toggleOverlay} content={content} handlerDelete={handlerDelete} handlerDownload={handlerDownload} />
+      </View>
+      {currentSong &&
+        (<View style={{
+          position: 'absolute',
+          bottom: 14,
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '100%',
+          zIndex:2
+        }}>
+          <Player />
+        </View>)
+      }
+    </>
+
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems:'center',
+    alignItems: 'center',
     backgroundColor: "#0D0D0D",
     zIndex: 1,
 

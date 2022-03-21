@@ -10,7 +10,7 @@ import { resetAll } from '../actions/audioPlayerActions'
 const CustomDrawer = (props) => {
 
     const dispatch = useDispatch()
-    const {currentSong,playbackObj, statusPlayback} = useSelector(state => state.audioPlayer)
+    const {currentSong, playbackObj, statusPlayback} = useSelector(state => state.audioPlayer)
 
     const handlerLogout = () => {
         dispatch(resetAll(playbackObj, statusPlayback))

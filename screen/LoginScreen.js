@@ -3,13 +3,13 @@ import React, { useContext } from 'react'
 import FormLogin from '../components/FormLogin'
 import AlertMessage from '../components/AlertMessage'
 import { GlobalContext } from '../context/GlobalContext'
-import { useSelector } from 'react-redux'
+
 
 
 const LoginScreen = () => {
   const {alert} = useContext(GlobalContext)
-  const user = useSelector(state => state.user)
-  console.log('En loginScreen', user)
+ 
+ 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>ToPodcast</Text>

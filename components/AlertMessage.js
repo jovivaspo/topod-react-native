@@ -8,7 +8,7 @@ const AlertMessage = () => {
     const colorAlert = {
         'error': 'red',
         'success': 'green',
-        'warning' : 'orange'
+        'warning' : '#CEA858'
     }
 
     useEffect(()=>{

@@ -9,7 +9,7 @@ const GaleryVideos = () => {
    
         const renderItem = (({ item }) => <CardVideo video={item} />)
         return (
-            <View style={{ flex:1, width: '100%', height: '100%', padding: 4 }}>
+            <View style={{ flex:1, width: '100%', height: '100%', padding: 4, marginTop:16 }}>
                 <FlatList data={videos}
                     renderItem={renderItem}
                     keyExtractor={(item) => item.id}

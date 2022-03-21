@@ -1,26 +1,28 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
-import { useSelector, useDispatch } from 'react-redux'
+import { View, Text, StyleSheet, Image, TouchableOpacity, ActivityIndicator } from 'react-native'
+import { useSelector } from 'react-redux'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { usePlayer } from '../useHooks/usePlayer'
-import { useContext } from 'react'
-import { GlobalContext } from '../context/GlobalContext'
-import Slider from '@react-native-community/slider'
+import { useNavigation } from '@react-navigation/native'
+
 
 const Player = () => {
-  const {currentSong, statusPlayback} = useSelector(state => state.audioPlayer)
-  const {id, title, duration, img} = currentSong
-  const {loading} = useContext(GlobalContext)
-  const {handlerPlayer} = usePlayer()
+  const { currentSong, statusPlayback, loadingSong } = useSelector(state => state.audioPlayer)
+  const { id, title, duration, img } = currentSong
+  const { handlerPlayer } = usePlayer()
+  const navigation = useNavigation()
+
 
   return (
     <View>
       <View style={styles.containerPlayer}>
-        <Image source={{ uri: img }} style={styles.img} />
-        <View style={{ flex: 1, justifyContent: 'center', height: '100%' }}>
-          <Text style={styles.title}>{title}</Text>
-        </View>
-        <TouchableOpacity style={styles.icon} onPress={()=>handlerPlayer(id, title, duration, img)}>
-         {!loading &&  <Icon name={  (statusPlayback?.isPlaying === true? 'pause-circle-outline' : "play-circle-outline")} size={35} color={'#fff'} />}
+        <TouchableOpacity style={styles.subContainer} onPress={()=>navigation.navigate('Player')}>
+          <Image source={{ uri: img }} style={styles.img} />
+          <View style={{ flex: 1, justifyContent: 'center', height: '100%' }}>
+            <Text style={styles.title}>{title}</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.icon} onPress={() => handlerPlayer(id, title, duration, img)}>
+          {loadingSong?  <ActivityIndicator size='large' color='#fff' /> : (<Icon name={(statusPlayback?.isPlaying === true ? 'pause-circle-outline' : "play-circle-outline")} size={35} color={'#fff'} />)}
         </TouchableOpacity>
       </View>
     </View>
@@ -39,10 +41,18 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: 5
   },
+  subContainer:{
+    flexDirection: 'row',
+    alignItems: 'center',
+    width:'85%',
+    borderRadius: 5,
+  
+  },
   title: {
     color: '#fff',
     fontFamily: 'Montserrat_Medium',
     fontSize: 10,
+    marginBottom:10
   },
 
   img: {
@@ -53,8 +63,8 @@ const styles = StyleSheet.create({
 
   },
   icon: {
-    margin: 7,
-    marginRight: 14
+    width:'15%',
+    alignItems:'center'
   }
 })
 

@@ -8,8 +8,7 @@ import Logo from '../assets/logo.png'
 import SeacherScreen from '../screen/SeacherScreen';
 import PlaylistScreen from '../screen/PlaylistScreen'
 import { useSelector } from 'react-redux';
-import { View } from 'react-native';
-import Player from '../components/Player';
+import PlayerScreen from '../screen/PlayerScreen';
 
 
 
@@ -17,8 +16,8 @@ const Drawer = createDrawerNavigator();
 
 const DrawerApp = () => {
 
-    const audioPlayer = useSelector(state => state.audioPlayer)
-
+const audioPlayer = useSelector(state => state.audioPlayer)
+    
 
     return (
 
@@ -55,25 +54,15 @@ const DrawerApp = () => {
                 }} />
 
                 <Drawer.Screen name="Playlist" component={PlaylistScreen} options={{
-                    drawerIcon: () => <Icon name="play-circle-outline" size={22} color={'#fff'} />
+                    drawerIcon: () => <Icon name="musical-note-outline" size={22} color={'#fff'} />
                 }} />
+
+               {audioPlayer.currentSong && <Drawer.Screen name="Player" component={PlayerScreen} options={{
+                    drawerIcon: () => <Icon name="play-circle-outline" size={22} color={'#fff'} />
+                }} />}
 
             </Drawer.Navigator>
 
-            {audioPlayer.currentSong &&
-
-                (<View style={{
-                    position: 'absolute',
-                    bottom: 14,
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    width: '100%',
-                }}>
-                    <Player />
-                </View>)
-
-            }
 
         </>
 
