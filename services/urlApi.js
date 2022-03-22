@@ -20,15 +20,15 @@ export const urls = () =>{
     }else{
         return  {
             URI_API: REACT_APP_URL_API,
-            PODCASTS_ALL : '/api/podcasts/all/',
-            LOGIN : `/api/user/login`,
-            REGISTER : `/api/user/register`,
-            SEARCH_VIDEOS : `/api/videos/`,
-            DONACIONES : `/donaciones`,
-            DOWNLOAD : `/api/podcasts/download/`,
-            DELETE : `/api/podcasts/delete/`,
-            CONVERT : `/api/videos`,
-            PLAYER: `/api/podcasts/single/`,
+            PODCASTS_ALL : `${REACT_APP_URL_API}/api/podcasts/all/`,
+            LOGIN : `${REACT_APP_URL_API}/api/user/login`,
+            REGISTER : `${REACT_APP_URL_API}/api/user/register`,
+            SEARCH_VIDEOS : `${REACT_APP_URL_API}/api/videos/`,
+            DONACIONES : `${REACT_APP_URL_API}/donaciones`,
+            DOWNLOAD : `${REACT_APP_URL_API}/api/podcasts/download/`,
+            DELETE : `${REACT_APP_URL_API}/api/podcasts/delete/`,
+            CONVERT : `${REACT_APP_URL_API}/api/videos`,
+            PLAYER: `${REACT_APP_URL_API}/api/podcasts/single/`,
 
         }
     }
