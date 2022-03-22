@@ -111,7 +111,6 @@ export const register = (form, setAlert, setForm, initialForm) => async (dispatc
 
 
 export const logout = () => async (dispatch) => {
-   
     await SecureStore.deleteItemAsync('userInfo')
     //await Keychain.resetGenericPassword()
     dispatch({ type: LOGOUT })
