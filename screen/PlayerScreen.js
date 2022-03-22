@@ -67,14 +67,14 @@ const PlayerScreen = () => {
                 </View>
                 <View style={styles.containerSlider}>
                 <View style={styles.containerDuration}>
-                        <Text>{secondsToString(position.toFixed(0))}</Text>
-                        <Text>{secondsToString(currentSong?.duration)}</Text>
+                        <Text style={styles.textDuration}>{secondsToString(position.toFixed(0))}</Text>
+                        <Text style={styles.textDuration}>{secondsToString(currentSong?.duration)}</Text>
                     </View>
                     <Slider 
                     minimumValue={0}
                     maximumValue={1}
-                    minimumTrackTintColor={"#fff"}
-                    maximumTrackTintColor={"#0D0D0D"}
+                    minimumTrackTintColor={"#0D0D0D"}
+                    maximumTrackTintColor={"#fff"}
                     value={positionSlider()}
                     disabled={true}
                     />
